@@ -98,7 +98,9 @@ public class Process {
             if (secondResult > sessionResult) {
                 sessionResult = secondResult;
                 sessionName = playerSecond.getName();
-            } else {
+            }
+        } else {
+            if (firstResult > sessionResult) {
                 sessionResult = firstResult;
                 sessionName = playerFirst.getName();
             }
@@ -114,14 +116,14 @@ public class Process {
             mainMenu();
             while (Pc.checkPlayground() && stopInd != 2) {
                 stopInd = 0;
-                if(!stepPlayer(playerFirst, Pc)){
+                if (!stepPlayer(playerFirst, Pc)) {
                     ++stopInd;
                 }
                 askCommand(Pc, playerFirst);
                 if (!Pc.checkPlayground()) {
                     break;
                 }
-                if(!stepPlayer(playerSecond, Pc)){
+                if (!stepPlayer(playerSecond, Pc)) {
                     ++stopInd;
                 }
                 if (!(playerSecond.getName().equals("Легкий Бот") || playerSecond.getName().equals("Сложный Бот"))) {
