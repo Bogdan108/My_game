@@ -108,6 +108,9 @@ public class Process {
             while (Pc.checkPlayground()) {
                 stepPlayer(playerFirst, Pc);
                 askCommand(Pc, playerFirst);
+                if (!Pc.checkPlayground()){
+                    break;
+                }
                 stepPlayer(playerSecond, Pc);
                 if (!(playerSecond.getName().equals("Легкий Бот") || playerSecond.getName().equals("Сложный Бот"))) {
                     askCommand(Pc, playerSecond);
