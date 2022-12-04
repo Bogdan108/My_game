@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Process {
-    private void mainMenu( ) {
+    private void mainMenu() {
         Scanner in = new Scanner(System.in);
         System.out.println("Выберите режим игры : \nлегкий - команда /e \nпродвинутый - команда /d  \nигрок против игрока - команда /pvp");
         String command = in.nextLine();
@@ -38,7 +38,8 @@ public class Process {
         }
     }
 
-    private void stepPlayer(Player player, Playground Pc) {
+    private boolean stepPlayer(Player player, Playground Pc) {
+        boolean specialInd = true;
         System.out.println("Актуальная доска: ");
         Pc.printGroundActual();
         if (player.getId() == GroundColor.W) {
@@ -54,11 +55,17 @@ public class Process {
             Pc.canGo(true, GroundColor.B);
         }
         Pc.printGroundCanGo();
-        player.changeCagePlayer(Pc);
+        if (Pc.checkPlaygroundCanGo()) {
+            player.changeCagePlayer(Pc);
+        } else {
+            System.out.println("Пропуск хода!");
+            specialInd = false;
+        }
         System.out.println("Актуальная доска: ");
         Pc.printGroundActual();
-
+        return specialInd;
     }
+
 
     private void askCommand(Playground Pc, Player player) {
         Scanner in = new Scanner(System.in);
@@ -87,12 +94,11 @@ public class Process {
         int secondResult = Pc.scoringPoints(GroundColor.B);
         System.out.println("Игрок " + playerFirst.getName() + " набрал очков: " + firstResult);
         System.out.println("Игрок " + playerSecond.getName() + " набрал очков: " + secondResult);
-        if(secondResult > firstResult){
-            if(secondResult > sessionResult){
+        if (secondResult > firstResult) {
+            if (secondResult > sessionResult) {
                 sessionResult = secondResult;
                 sessionName = playerSecond.getName();
-            }
-            else{
+            } else {
                 sessionResult = firstResult;
                 sessionName = playerFirst.getName();
             }
@@ -103,23 +109,31 @@ public class Process {
     public void startGame() {
         boolean sessionInd = true;
         while (sessionInd) {
+            int stopInd = 0;
             Playground Pc = new Playground();
             mainMenu();
-            while (Pc.checkPlayground()) {
-                stepPlayer(playerFirst, Pc);
+            while (Pc.checkPlayground() && stopInd != 2) {
+                stopInd = 0;
+                if(!stepPlayer(playerFirst, Pc)){
+                    ++stopInd;
+                }
                 askCommand(Pc, playerFirst);
-                if (!Pc.checkPlayground()){
+                if (!Pc.checkPlayground()) {
                     break;
                 }
-                stepPlayer(playerSecond, Pc);
+                if(!stepPlayer(playerSecond, Pc)){
+                    ++stopInd;
+                }
                 if (!(playerSecond.getName().equals("Легкий Бот") || playerSecond.getName().equals("Сложный Бот"))) {
                     askCommand(Pc, playerSecond);
                 }
             }
             endGame(playerFirst, playerSecond, Pc);
+
             System.out.println("Желаете ли вы продолжить игру ?\n/y or /n");
             Scanner in = new Scanner(System.in);
             String command = in.nextLine();
+
             boolean indicator = false;
             while (!indicator) {
                 if (!command.equals("/y")) {
@@ -130,8 +144,7 @@ public class Process {
                         System.out.println("Неверная команда! \nПопробуйте снова!");
                         command = in.nextLine();
                     }
-                }
-                else{
+                } else {
                     indicator = true;
                 }
             }

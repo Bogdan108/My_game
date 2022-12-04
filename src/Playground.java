@@ -135,6 +135,17 @@ public class Playground {
         }
         return counter != 0;
     }
+    boolean checkPlaygroundCanGo() {
+        int counter = 0;
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                if (groundCanGo[i][j] == GroundColor.Y) {
+                    ++counter;
+                }
+            }
+        }
+        return counter != 0;
+    }
 
     void savePlayground() {
         for (int i = 0; i < 8; ++i) {
