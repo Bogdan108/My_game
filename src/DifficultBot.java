@@ -17,7 +17,7 @@ public class DifficultBot implements Player {
     public void changeCagePlayer(Playground play) {
         double specialSum;
         double localSum = 0;
-        double maxDiff = 0;
+        double maxDiff = -100;
         double maxSum;
         int maxX = 0;
         int maxY = 0;
@@ -71,8 +71,8 @@ public class DifficultBot implements Player {
                         }
                     }
                     play.backPlayground();
-                    if (specialSum - localSum > maxDiff) {
-                        maxDiff = specialSum - localSum;
+                    if (specialSum - maxSum > maxDiff) {
+                        maxDiff = specialSum - maxSum;
                         maxX = i;
                         maxY = j;
                     }
